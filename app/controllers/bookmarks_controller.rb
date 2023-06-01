@@ -1,47 +1,37 @@
 class BookmarksController < ApplicationController
-  before_action :find_list, only: [:new, :create, :destroy]
+  before_action :set_bookmark, only: :destroy
+  before_action :set_list, only: [:new, :create]
 
   def new
-    @list = List.find(params[:list_id])
     @bookmark = Bookmark.new
   end
 
-  def show
-    @bookmark = Bookmark.find(params[:id])
-    @list = @bookmark.list
-  end
-
   def create
-    @list = List.find(params[:list_id])
-    @bookmark = @list.bookmarks.build(bookmark_params)
+    @bookmark = Bookmark.new(bookmark_params)
+    @bookmark.list = @list
     if @bookmark.save
-      redirect_to @list, notice: 'Bookmark was successfully created.'
+      redirect_to list_path(@list)
     else
-      render 'new'
+      render :new
     end
   end
-  @
+
   def destroy
-    @bookmark = Bookmark.find(params[:id])
-    @list = @bookmark.list # Assuming the association is named "list"
-
     @bookmark.destroy
-
-    redirect_to list_path(@list), notice: 'Bookmark was successfully removed.'
+    redirect_to list_path(@bookmark.list), status: :see_other
   end
-
 
   private
 
-  def find_list
-    @list = List.find(params[:list_id])
+  def bookmark_params
+    params.require(:bookmark).permit(:comment, :movie_id)
   end
 
-  def find_bookmark
+  def set_bookmark
     @bookmark = Bookmark.find(params[:id])
   end
 
-  def bookmark_params
-    params.require(:bookmark).permit(:boorkmark_id, :movie_id, :comment)
+  def set_list
+    @list = List.find(params[:list_id])
   end
 end
