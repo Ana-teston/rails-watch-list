@@ -1,0 +1,14 @@
+<h1><%= @list.name %> List</h1>
+
+<!-- Iterate over the bookmarks and display movie information -->
+<% @list.bookmarks.each do |bookmark| %>
+  <div class="bookmark">
+    <h2><%= bookmark.movie.title %></h2>
+    <p><strong>Comment:</strong> <%= bookmark.comment %></p>
+    <%= link_to 'Delete Bookmark', list_bookmark_path(@list, bookmark), method: :delete, data: { confirm: 'Are you sure you want to delete this bookmark?' }, class: 'btn btn-danger btn-sm' %>
+
+  </div>
+<% end %>
+
+<!-- Add a link to return to the lists index page -->
+<%= link_to 'Back to Lists', lists_path %>

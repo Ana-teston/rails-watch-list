@@ -1,0 +1,7 @@
+<h1 class="font-semibold text-3xl mb-8">New List</h1>
+
+<%= simple_form_for(@list) do |f| %>
+  <%= f.input :name %>
+
+  <%= f.button :submit, class: 'btn btn-primary' %>
+<% end %>
